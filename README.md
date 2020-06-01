@@ -4,6 +4,7 @@
 
 #+++++++++++特征
 可以加入以下特征：
+
 ad_id
 advertiser_id 
 click_times
@@ -18,6 +19,7 @@ time可以用作position embedding,也可以用delta time作为position embeddin
 
 
 #++++++++++++模型结构从左至右大致如下
+
 embedding  ->  transformer -> concat(max pool ,min pool) ->MLP
 
 #运行
