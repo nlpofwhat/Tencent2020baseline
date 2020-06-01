@@ -32,7 +32,7 @@ def make_train_feed_dict(model, batch):
                  model.product_id: np.array(batch[0][6]),
                  model.time: np.array(batch[0][7]),
                  model.label: batch[1],
-                 model.keep_prob: .9}
+                 model.is_training: True}
     """
     feed_dict = {model.ad_id : np.array([x[0] for x in batch[0]]),
                 model.advertiser_id : np.array([x[1] for x in batch[0]]),
@@ -88,7 +88,7 @@ def make_eval_feed_dict(model, batch):
                  model.product_id: np.array(batch[0][6]),
                  model.time: np.array(batch[0][7]),
                  model.label: batch[1],
-                 model.keep_prob: 1.0}
+                 model.is_training: False}
     """
     feed_dict = {model.ad_id : np.array([x[0] for x in batch[0]]),
                 model.advertiser_id : np.array([x[1] for x in batch[0]]),
@@ -120,7 +120,7 @@ def make_test_feed_dict(model, batch):
                  model.product_category: np.array(batch[5]),
                  model.product_id: np.array(batch[6]),
                  model.time: np.array(batch[7]),
-                 model.keep_prob: 1.0}
+                 model.is_training: False}
     return feed_dict
 def run_test_step(model, sess, batch):
     feed_dict = make_test_feed_dict(model, batch)
