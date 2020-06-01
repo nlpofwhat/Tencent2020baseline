@@ -3,8 +3,7 @@
 基于transformer模型,后面可以自己加入pool层
 
 #+++++++++++特征
-可以加入以下特征，time可以用作position embedding,也可以用delta time作为position embedding，
-多篇论文已经证明position embedding对于transformer是很关键的，单纯的统计特征很难对时间序列进行建模
+可以加入以下特征：
 ad_id
 advertiser_id 
 click_times
@@ -13,6 +12,10 @@ industry
 product_category 
 product_id
 time
+
+time可以用作position embedding,也可以用delta time作为position embedding，
+多篇论文已经证明position embedding对于transformer是很关键的，单纯的统计特征很难对时间序列进行建模
+
 
 #++++++++++++模型结构从左至右大致如下
 embedding  ->  transformer -> concat(max pool ,min pool) ->MLP
