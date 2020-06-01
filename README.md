@@ -21,8 +21,12 @@ time可以用作position embedding,也可以用delta time作为position embeddin
 #++++++++++++模型结构从左至右大致如下
 
 embedding  ->  transformer -> concat(max pool ,min pool) ->MLP
+总的embedding_size必须能被num_heads=8整除
 
-#运行
+#++++++++++++samll数据作为调试用
+
+#++++++++++++运行
+
 1. 新建train文件夹把训练集放到里面，新建test文件夹把测试集放到里面
 2. python multi_head.py
 3. 参数需要自己调整
