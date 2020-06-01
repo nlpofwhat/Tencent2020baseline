@@ -314,7 +314,7 @@ if __name__ == '__main__':
         recall = TP / (TP+FN+1e-6)  # 查全率
         f2 = 2*precision*recall/(precision+recall+1e-6)
         """      
-        if f2=temp_f1 and f1>0.9 :
+        if f2>temp_f1 and f1>0.9 :
             temp_f1 = f1
             
 
