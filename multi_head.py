@@ -39,9 +39,7 @@ class AttentionClassifier(object):
         self.product_category_embedding_size = config["product_category_embedding_size"]
         self.product_id_embedding_size = config["product_id_embedding_size"]
         self.time_embedding_size = config["product_id_size"]
-        
-        
-        
+        self.is_training = tf.placeholder(tf.bool)
         self.n_class = config["n_class"]
         self.learning_rate = config["learning_rate"]
 
@@ -120,11 +118,10 @@ class AttentionClassifier(object):
         #                             trainable=True)
         #batch_embedded = tf.nn.embedding_lookup(embeddings_var, self.x)
         
-        
-        
+
         # multi-head attention
         embedded_chars = positional_encoding(self.embedded_chars,self.time,maxlen=91,masking=True,scope="positional_encoding")
-        ma = multihead_attention(queries=embedded_chars, keys=embedded_chars,dropout_rate=1-self.keep_prob)
+        ma = multihead_attention(queries=embedded_chars, keys=embedded_chars,dropout_rate=0.5，is_training = self.is_training)
         
         # FFN(x) = LN(x + point-wisely NN(x))
         outputs = feedforward(ma, [self.hidden_size, self.embedding_size])
@@ -198,11 +195,7 @@ if __name__ == '__main__':
     }
     #注意总的embedding_size必须是8的倍数
 
-    # load data
-    # 加载数据这块需要修改
-    #x_train, y_train = load_data("../dbpedia_data/dbpedia_csv/train.csv", sample_ratio=1e-2, one_hot=False)
-    #x_train, y_train = load_train_data(, sample_ratio=1e-2, one_hot=False)
-    
+    #训练集路径
     #ad_file = 'train/ad.csv'
     #click_log_file = 'train/click_log.csv'
     #user_file = 'train/user.csv'
@@ -214,11 +207,8 @@ if __name__ == '__main__':
     x_train, y_train = load_train_data(ad_file,click_log_file,user_file, n_class=2, one_hot=False)
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    #ad_file = 
-    #click_log_file = 
-    #user_file = 
-    #x_test, y_test = load_data("../dbpedia_data/dbpedia_csv/test.csv", one_hot=False)
-    #x_test = load_test_data("../dbpedia_data/dbpedia_csv/test.csv", one_hot=False)
+    
+    #测试集路径
     #ad_file = 'test/ad.csv'
     #click_log_file = 'test/click_log.csv'
     #ad_file = 'test/ad.csv'
@@ -297,22 +287,14 @@ if __name__ == '__main__':
             #prediction = return_dict['prediction']
             y_pred.extend(list(prediction ))
             y_true.extend(list(y_batch-1))
-        for x,y in zip(y_pred,y_true):
-            f.write(str(x+1))
-            f.write(str(y+1))
-            f.write('\n')
-        #tn, fp, fn, tp = confusion_matrix(y_pred, y_true,labels=[0,2]).ravel()
-        #numpy中的ravel()、flatten()、squeeze()都有将多维数组转换为一维数组的功能，
-        #print(y_pred)
-        #print(y_true)
-        #print(confusion_matrix(y_true, y_pred).ravel())
+ 
         tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
         #print("tn : %.3f  fp : %.3f   fn : %.3f   tp : %.3f"%(tn,fp,fn,tp))
         
         precision = tp / (tp+fp+1e-9)  # 查准率
         recall = tp / (tp+fn+1e-9)  # 查全率
-        f1 = 2*precision*recall/(precision+recall+1e-9)
-        print("dev precision : %.3f    call : %.3f    f1 : %.3f"%(precision,recall,f1))
+        f2 = 2*precision*recall/(precision+recall+1e-9)
+        print("dev precision : %.3f    call : %.3f    f1 : %.3f"%(precision,recall,f2))
         
         #f2 = recall_score(y_true, y_pred, average='micro')
         #print("dev precision f1 : %.3f"%(f2))
@@ -320,13 +302,6 @@ if __name__ == '__main__':
         t2 = time.time()
         print("dev finished, time consumed : ", t2 - t1, " s")
 
-        #二分类评级指标
-        """
-        tn, fp, fn, tp = confusion_matrix(y_pred, y_true,labels=[1,2]).ravel()
-        precision = tp / (tp+fp+1e-6)  # 查准率
-        recall = tp / (tp+fn+1e-6)  # 查全率
-        f1 = 2*precision*recall/(precision+recall+1e-6)
-        print("training precision : %.3f    call : %.3f    f1 : %.3f"%(precision,recall,f1))
         """
         #10分类评价指标
         """
@@ -337,16 +312,9 @@ if __name__ == '__main__':
         TN = cm.sum() - (FP + FN + TP)
         precision = TP / (TP+FP+1e-6)  # 查准率
         recall = TP / (TP+FN+1e-6)  # 查全率
-        f1 = 2*precision*recall/(precision+recall+1e-6)
-        """
-        #p,r,f1 = classifier.micro_f1(pred,y_true)
-        # y_true = ["cat", "dog", "cat", "cat", "dog", "rebit"]
-        # y_pred = ["dog", "dog", "rebit", "cat", "dog", "cat"]
-        # C2= confusion_matrix(y_true, y_pred, labels=["dog", "rebit", "cat"])
-        # sns.heatmap(C2,annot=True)
-        #p,r,f1  = sess.run([p,r,f1])
-        
-        if f1>=temp_f1:
+        f2 = 2*precision*recall/(precision+recall+1e-6)
+        """      
+        if f2=temp_f1 and f1>0.9 :
             temp_f1 = f1
             
 
