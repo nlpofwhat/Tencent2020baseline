@@ -30,6 +30,7 @@ embedding  ->  transformer -> concat(max pool ,min pool) ->MLP
 1. 新建train文件夹把训练集放到里面，新建test文件夹把测试集放到里面
 2. python multi_head.py
 3. 参数需要自己调整
+4. 主程序 python multi_head.py
 
 
 注意：没有加上k折交叉，单词数据集划分可能导致验证集上的指标不稳定，有待解决
