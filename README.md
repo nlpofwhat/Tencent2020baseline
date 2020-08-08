@@ -17,7 +17,7 @@ time
 time可以用作position embedding,也可以用delta time作为position embedding，
 多篇论文已经证明position embedding对于transformer是很关键的，单纯的统计特征很难对时间序列进行建模
 
-# 主要环境
+#++++++++++++++主要环境
 python 3.5
 tensorflow 1.12.0
 cuda 9.0
