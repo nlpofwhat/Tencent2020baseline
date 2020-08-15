@@ -39,3 +39,4 @@ embedding  ->  transformer -> concat(max pool ,min pool) ->MLP
 
 
 注意：没有加上k折交叉，单词数据集划分可能导致验证集上的指标不稳定，有待解决
+参考代码:https://github.com/TobiasLee/Text-Classification
